@@ -1,31 +1,29 @@
 export default async function handler(req, res) {
   const { type, userid, sub1, sub2, sub3, value, currency } = req.query;
 
-  const accessToken = process.env.FB_ACCESS_TOKEN;
-  const pixelId = '1532014038042881'; // твой Pixel ID
-  const testEventCode = 'TEST57641';  // твой тест-код из Meta
+  const accessToken = process.env.META_ACCESS_TOKEN; // ← читаем верную переменную
+  const pixelId = '1532014038042881';
+  const testEventCode = 'TEST57641';  // можешь закомментировать после тестов
 
   const eventName =
-    type === 'registration' ? 'CompleteRegistration' :
-    type === 'deposit' ? 'Purchase' :
-    type === 'first_deposit' ? 'InitialDeposit' :
-    type === 'repeated_deposit' ? 'RepeatedDeposit' :
+    String(type).toLowerCase() === 'registration' ? 'CompleteRegistration' :
+    String(type).toLowerCase() === 'deposit' ? 'Purchase' :
+    String(type).toLowerCase() === 'first_deposit' ? 'Purchase' :
+    String(type).toLowerCase() === 'repeated_deposit' ? 'Purchase' :
     'CustomEvent';
 
-  const ref = req.headers.referer || '';
-  const ua = req.headers['user-agent'] || '';
-  const ip =
-    req.headers['x-forwarded-for']?.split(',')[0] ||
-    req.connection?.remoteAddress ||
-    '';
+  const ref = req.headers.referer || `https://${req.headers.host || ''}/`;
+  const ua  = req.headers['user-agent'] || '';
+  const ip  = (req.headers['x-forwarded-for'] || '').split(',')[0].trim();
 
   const payload = {
     data: [
       {
         event_name: eventName,
         event_time: Math.floor(Date.now() / 1000),
+        event_id: sub3 || undefined,
         action_source: 'website',
-        event_source_url: ref || 'https://lollybet-promo.vercel.app/',
+        event_source_url: ref,
         user_data: {
           client_ip_address: ip || undefined,
           client_user_agent: ua || undefined,
@@ -40,10 +38,14 @@ export default async function handler(req, res) {
         },
       },
     ],
-    test_event_code: testEventCode, // Важно: test_event_code на верхнем уровне
+    test_event_code: testEventCode, // важно: на верхнем уровне
   };
 
   try {
+    if (!accessToken) {
+      return res.status(200).json({ ok: false, error: 'NO_TOKEN_IN_ENV' });
+    }
+
     const fbResponse = await fetch(
       `https://graph.facebook.com/v20.0/${pixelId}/events?access_token=${accessToken}`,
       {
@@ -54,8 +56,8 @@ export default async function handler(req, res) {
     );
 
     const fbData = await fbResponse.json();
-    res.status(200).json({ ok: true, fb: fbData });
+    return res.status(200).json({ ok: true, fb: fbData });
   } catch (error) {
-    res.status(500).json({ ok: false, error: error.message });
+    return res.status(200).json({ ok: false, error: String(error) });
   }
 }
