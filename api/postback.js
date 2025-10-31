@@ -3,7 +3,7 @@ export default async function handler(req, res) {
 
   const accessToken = process.env.META_ACCESS_TOKEN; // ← читаем верную переменную
   const pixelId = '1532014038042881';
-  const testEventCode = 'TEST57641';  // можешь закомментировать после тестов
+  const testEventCode = 'TEST36398';  // можешь закомментировать после тестов
 
   const eventName =
     String(type).toLowerCase() === 'registration' ? 'CompleteRegistration' :
