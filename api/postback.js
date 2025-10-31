@@ -38,6 +38,7 @@ export default async function handler(req, res) {
         event_id: sub3 || undefined,
         action_source: 'website',
         event_source_url: ref,
+        test_event_code: 'TEST57641',
         user_data: {
           fbp: sub1 || undefined,
           fbc: sub2 || undefined,
