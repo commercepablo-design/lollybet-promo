@@ -397,7 +397,7 @@ document.addEventListener('DOMContentLoaded', function(){
   // ► Кастомное событие в Meta при клике по CTA
   if (cta) {
     cta.addEventListener('click', function(){
-      try { fbq('trackCustom', 'SpinLB'); } catch(e) {}
+      try { fbq('trackCustom', 'SpinLB', {}, { eventID: 'spinlb_' + Date.now() }); } catch(e) {}
     });
   }
 
@@ -437,3 +437,4 @@ document.addEventListener('DOMContentLoaded', function(){
 </script>
 </body>
 </html>
+
