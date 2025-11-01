@@ -1,15 +1,25 @@
 export default async function handler(req, res) {
-  const { type, userid, sub1, sub2, sub3, value, currency } = req.query;
+  // (опционально) CORS, если понадобится
+  // res.setHeader('Access-Control-Allow-Origin', '*');
 
-  const accessToken = process.env.META_ACCESS_TOKEN; // ← читаем верную переменную
+  const type   = (req.query.type || '').toLowerCase();
+  const userid = req.query.userid || '';
+
+  // Поддержка обоих вариантов имен:
+  const fbp = req.query.sub1 || req.query.pid || ''; // _fbp
+  const fbc = req.query.sub2 || req.query.sid || ''; // _fbc
+  const cid = req.query.sub3 || req.query.cid || ''; // click_id → event_id
+
+  const value    = req.query.value || '';
+  const currency = req.query.currency || 'EUR';
+
+  const accessToken = process.env.META_ACCESS_TOKEN; // положен в Vercel
   const pixelId = '1532014038042881';
-  const testEventCode = 'TEST36398';  // можешь закомментировать после тестов
+  // const testEventCode = 'TEST36398'; // ← включи на время тестов, потом закомментируй
 
   const eventName =
-    String(type).toLowerCase() === 'registration' ? 'CompleteRegistration' :
-    String(type).toLowerCase() === 'deposit' ? 'Purchase' :
-    String(type).toLowerCase() === 'first_deposit' ? 'Purchase' :
-    String(type).toLowerCase() === 'repeated_deposit' ? 'Purchase' :
+    type === 'registration' ? 'CompleteRegistration' :
+    (type === 'deposit' || type === 'first_deposit' || type === 'repeated_deposit' || type === 'cpa') ? 'Purchase' :
     'CustomEvent';
 
   const ref = req.headers.referer || `https://${req.headers.host || ''}/`;
@@ -21,24 +31,26 @@ export default async function handler(req, res) {
       {
         event_name: eventName,
         event_time: Math.floor(Date.now() / 1000),
-        event_id: sub3 || undefined,
+        event_id: cid || undefined,                 // важен для дедупа
         action_source: 'website',
         event_source_url: ref,
         user_data: {
           client_ip_address: ip || undefined,
           client_user_agent: ua || undefined,
           external_id: userid ? String(userid) : undefined,
-          fbp: sub1 || undefined,
-          fbc: sub2 || undefined,
+          fbp: fbp || undefined,
+          fbc: fbc || undefined,
         },
         custom_data: {
-          value: value ? Number(value) : undefined,
+          value: value ? Number(value) : undefined, // для Purchase
           currency: currency || 'EUR',
-          sub3: sub3 || undefined,
+          click_id: cid || undefined,
+          source_sid: fbc || undefined,
+          source_pid: fbp || undefined,
         },
       },
     ],
-    test_event_code: testEventCode, // важно: на верхнем уровне
+    // test_event_code: testEventCode,              // ← убери после тестов
   };
 
   try {
