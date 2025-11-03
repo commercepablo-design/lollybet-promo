@@ -50,7 +50,7 @@ export default async function handler(req, res) {
         },
       },
     ],
-    test_event_code: testEventCode,              // ← убери после тестов
+    test_event_code: testEventCode              // ← убери после тестов
   };
 
   try {
