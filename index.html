@@ -207,11 +207,11 @@ document.addEventListener('DOMContentLoaded', function(){
   const prizes = [
     {label:'50€ sur le solde'},
     {label:'60 FS • Fire Joker'},
-    {label:'100€ sur le solde'},
-    {label:'+100&#8239;% dépôt'},
-    {label:'200€ sur le solde'},
+    {label:'+100€ sur le solde'},
+    {label:'100&#8239;% dépôt'},
+    {label:'+200€ sur le solde'},
     {label:'25 FS • Moon Princess'},
-    {label:'+200&#8239;% dépôt • 100 Tours Gratuits'},
+    {label:'200&#8239;% dépôt • + 100 Free Spins'},
     {label:'40 FS • Le Bandit'}
   ];
 
@@ -365,7 +365,7 @@ document.addEventListener('DOMContentLoaded', function(){
     return (Math.random()<0.5?-1:1)*amp;
   }
 
-  const forcedIndex = prizes.findIndex(p => p.label.includes('+300'));
+  const forcedIndex = prizes.findIndex(p => p.label.includes('200'));
   const segAngle = 360/prizes.length;
 
   // === helpers для динамического href ===
@@ -449,6 +449,7 @@ document.addEventListener('DOMContentLoaded', function(){
 </script>
 </body>
 </html>
+
 
 
 
