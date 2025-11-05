@@ -15,7 +15,7 @@ export default async function handler(req, res) {
 
   const accessToken = process.env.META_ACCESS_TOKEN; // положен в Vercel
   const pixelId = '1532014038042881';
-  const testEventCode = 'TEST66192'; // ← включи на время тестов, потом закомментируй
+  const testEventCode = 'TEST17997'; // ← включи на время тестов, потом закомментируй
 
   const eventName =
     type === 'registration' ? 'CompleteRegistration' :
