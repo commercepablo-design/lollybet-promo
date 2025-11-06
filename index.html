@@ -1,461 +1,94 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Lollybet • Wheel</title>
-
-<!-- Facebook Pixel Code -->
-<script>
-  !function(f,b,e,v,n,t,s){
-    if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-    n.queue=[];t=b.createElement(e);t.async=!0;
-    t.src=v;s=b.getElementsByTagName(e)[0];
-    s.parentNode.insertBefore(t,s)
-  }(window, document,'script','https://connect.facebook.net/en_US/fbevents.js');
-  fbq('init', '1532014038042881');
-  fbq('track', 'PageView');
-</script>
-<noscript><img height="1" width="1" style="display:none"
-  src="https://www.facebook.com/tr?id=1532014038042881&ev=PageView&noscript=1"
-/></noscript>
-<!-- End Facebook Pixel Code -->
-
-<style>
-  :root{
-    --bg0:#0c0f18; --bg1:#141827; --ink:#ffffff;
-    --muted:#b9c0d4; --accent:#e1063c;
-    --ctaA:#ff1f44; --ctaB:#ff4d4d;
-    --line:#23283a; --glow:rgba(255,45,85,.28);
-    --wheel-size: min(500px, 90vw);
-    --wheel-size-compact: min(460px, 86vw);
-    --btn-fs:16px; --btn-radius:14px;
-    --btn-primary-pad-y:10px; --btn-primary-pad-x:16px; --btn-w-primary:320px;
-    --chip-pad-y:8px; --chip-pad-x:12px; --chip-radius:12px; --chip-fs:14px;
-    --timer-scale:.9;
-  }
-  @media (max-width:540px){ :root{ --timer-scale:.85; } }
-  @media (max-width:480px){
-    :root{
-      --chip-pad-y:6px; --chip-pad-x:10px; --chip-fs:12px;
-      --btn-w-primary:100%;
-      --wheel-size: min(480px, 92vw);
-      --wheel-size-compact: min(440px, 90vw);
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LollyBet • Activation du bonus</title>
+  <style>
+    :root { --ink:#fff; --accent:#e7355b; }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      background-color:#05060b;
+      background:
+        radial-gradient(6px 6px at 15% 25%, rgba(231,53,91,0.25), transparent 60%),
+        radial-gradient(8px 8px at 80% 20%, rgba(231,53,91,0.18), transparent 60%),
+        radial-gradient(5px 5px at 60% 80%, rgba(255,255,255,0.07), transparent 60%),
+        radial-gradient(6px 6px at 25% 70%, rgba(231,53,91,0.15), transparent 60%),
+        radial-gradient(circle at center, #0c0e1a 60%, #05060b);
+      background-repeat:no-repeat;
+      color:var(--ink);
+      font-family:'Poppins', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      min-height:100svh; text-align:center; overflow:hidden; margin:0;
     }
-  }
-  @media (max-height:740px){
-    :root{ --wheel-size: var(--wheel-size-compact); }
-    .top{ margin-bottom:6px; }
-    .actions{ margin-top:10px; }
-  }
+    .logo{font-size:2em; font-weight:700}
+    .logo .l{color:var(--accent)}
+    .wheel{
+      width:120px;height:120px;border:6px solid var(--accent);border-radius:50%;
+      border-top-color:#fff;animation:spin 1.4s linear infinite;margin:30px 0;
+      filter:drop-shadow(0 0 18px rgba(231,53,91,.4)) drop-shadow(0 0 40px rgba(231,53,91,.12));
+    }
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .loading-text{font-size:1.2em;color:#cfcfcf;animation:blink 1.4s ease-in-out infinite}
+    @keyframes blink{0%,100%{opacity:.6}50%{opacity:1}}
+    .footer{margin-top:30px;font-size:.85em;color:#aaa;display:flex;align-items:center;justify-content:center;gap:6px;opacity:.95}
+    .flag{width:18px;height:12px;border-radius:2px;display:inline-block;
+      background:linear-gradient(90deg,#0055a4 0 33%,#fff 33% 66%,#ef4135 66%); box-shadow:0 0 2px rgba(0,0,0,.4);}
+  </style>
 
-  *{box-sizing:border-box}
-  html,body{
-    height:100%; margin:0; background:#0c0f18; overflow:hidden; overscroll-beavior:none;
-    -webkit-text-size-adjust:100%;
-    font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif; color:var(--ink);
-  }
-  body{ background: radial-gradient(1400px 1000px at 20% 10%, #101528 0%, var(--bg0) 55%, #0a0e18 100%); }
-
-  .hdr{display:flex;align-items:center;justify-content:center;padding:10px}
-  .logo{font-weight:900;letter-spacing:.3px;font-size:26px}
-  .logo span:nth-child(2){color:var(--accent)}
-
-  .wrap{height:100svh;display:flex;align-items:flex-start;justify-content:center;padding:10px}
-  .card{width:min(900px,94vw);background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.015));
-    border:1px solid var(--line);border-radius:18px;box-shadow:0 18px 40px rgba(0,0,0,.45);padding:12px;isolation:isolate}
-
-  .top{display:flex;align-items:center;gap:10px}
-  .left-tags{display:flex;gap:10px;align-items:center;flex-wrap:nowrap}
-  .chip{display:inline-flex;align-items:center;gap:8px;padding:var(--chip-pad-y) var(--chip-pad-x);
-    border-radius:var(--chip-radius);background:#1b2133;border:1px solid var(--line);
-    font-weight:700;color:#e6ebff;white-space:nowrap;font-size:var(--chip-fs);line-height:1}
-  .flag {
-  width: 18px;
-  height: 12px;
-  display: inline-block;
-  border-radius: 2px;
-  overflow: hidden;
-  box-shadow: 0 0 0 1px rgba(255,255,255,.15);
-  vertical-align: -2px;
-  margin-right: 6px;
-  }
-
-  .flag.fr {
-    background: linear-gradient(90deg, #0055a4 0% 33%, #fff 33% 66%, #ef4135 66% 100%);
-  }
-
-  .timer{
-    margin-left:auto;margin-right:12px;display:inline-flex;align-items:center;gap:6px;
-    padding:calc(var(--chip-pad-y)*var(--timer-scale)) calc(var(--chip-pad-x)*var(--timer-scale));
-    border-radius:calc(var(--chip-radius)*var(--timer-scale));
-    background:linear-gradient(90deg,rgba(225,6,60,.18),rgba(255,79,79,.18));
-    border:1px solid rgba(255,79,79,.35);
-    color:#ffd7db;font-weight:800;white-space:nowrap;
-    font-size:calc(var(--chip-fs)*.95);line-height:1;
-    min-width:var(--timer-minw,auto);max-width:var(--timer-maxw,none);
-    transform: translateY(-2px);
-  }
-  .timer .val{
-    font-variant-numeric:tabular-nums;color:#fff;background:#1e2436;
-    border:1px solid var(--line);padding:2px 8px;border-radius:6px;min-width:44px;text-align:center;
-  }
-  @keyframes pulseCta{0%,100%{transform:scale(1);box-shadow:0 10px 24px rgba(255,45,85,.28)}50%{transform:scale(1.03);box-shadow:0 14px 32px rgba(255,45,85,.28)}}
-  .wheel-wrap{background:#111626;border:1px solid var(--line);border-radius:16px;padding:10px;display:grid;place-items:center}
-  .wheel-area{width:100%;max-width:var(--wheel-size);aspect-ratio:1;position:relative;margin:0 auto;display:grid;place-items:center;overflow:visible}
-  .wheel{width:100%;height:auto;display:block;margin:0 auto;transform:rotate(0deg);transition:transform 5.2s cubic-bezier(.12,.64,.12,1);will-change:transform;backface-visibility:hidden}
-  .pointer{position:absolute;top:-2px;left:50%;transform:translateX(-50%);width:0;height:0;z-index:9;pointer-events:none}
-  .pointer::before{content:"";position:absolute;left:-19px;top:-3px;border-left:19px solid transparent;border-right:19px solid transparent;border-top:34px solid rgba(255,255,255,.9);filter:drop-shadow(0 1px 3px rgba(255,255,255,.45))}
-  .pointer::after{content:"";position:absolute;left:-16px;top:0;border-left:16px solid transparent;border-right:16px solid transparent;border-top:30px solid var(--accent)}
-  .actions{display:flex;flex-direction:column;gap:10px;justify-content:center;align-items:center;margin-top:12px;width:100%}
-  .btn,.btn:link,.btn:visited{color:#fff!important;text-decoration:none;text-align:center}
-  .btn{appearance:none;border:none;outline:none;cursor:pointer;border-radius:14px;font-weight:900;color:#fff;background:linear-gradient(90deg,#ff1f44,#ff4d4d);box-shadow:0 10px 24px rgba(255,45,85,.28);line-height:1.1;transition:transform .12s ease}
-  .btn:active{transform:translateY(1px)} .btn-primary{padding:10px 16px;font-size:16px;width:var(--btn-w-primary,320px)}
-  .btn.pulse{animation:pulseCta 2.6s ease-in-out infinite}
-  .result{font-weight:800;text-align:center;color:#ffdfe6;margin-top:2px}
-  .pill-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;justify-content:center}
-  .pill{font-size:13px;background:#0f1423;border:1px solid var(--line);border-radius:999px;padding:6px 10px;color:#d8def0}
-  .legal{margin-top:12px;font-size:12px;color:#aeb6cc;opacity:.9}
-  .win{ filter:url(#winGlow) brightness(1.12); }
-</style>
+  <!-- Meta Pixel -->
+  <script>
+    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+    n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init','1532014038042881'); fbq('track','PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+         src="https://www.facebook.com/tr?id=1532014038042881&ev=PageView&noscript=1"/></noscript>
 </head>
 
 <body>
-<header class="hdr">
-  <div class="logo"><span>lolly</span><span>bet</span></div>
-</header>
+  <div class="logo"><span class="l">lolly</span>bet</div>
+  <div class="wheel" aria-hidden="true"></div>
+  <div class="loading-text">Chargement de votre bonus exclusif...</div>
+  <div class="footer"><span class="flag"></span>Offre réservée aux nouveaux joueurs</div>
 
-<div class="wrap">
-  <div class="card">
-    <div class="top">
-      <div class="left-tags">
-        <div class="chip" id="chip-offre"><span class="flag fr"></span> Offre France</div>
-        <div class="chip">Vérifié</div>
-      </div>
-      <div class="timer"><span class="lbl">Expire dans</span><span class="val" id="timer">10:00</span></div>
-    </div>
-
-    <section class="wheel-wrap">
-      <div class="wheel-area">
-        <svg class="wheel" id="wheel" viewBox="0 0 100 100" aria-label="wheel">
-          <defs>
-            <linearGradient id="gradRed" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0" stop-color="#b70f2b"/><stop offset="1" stop-color="#e1063c"/>
-            </linearGradient>
-            <linearGradient id="gradWhite" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#ffe3ea"/>
-            </linearGradient>
-            <filter id="softGlow"><feGaussianBlur stdDeviation="0.16" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-            <filter id="winGlow" filterUnits="userSpaceOnUse" x="-100" y="-100" width="300" height="300">
-              <feGaussianBlur in="SourceGraphic" stdDeviation="1.4" result="blur1"/>
-              <feGaussianBlur in="SourceGraphic" stdDeviation="2.6" result="blur2"/>
-              <feMerge><feMergeNode in="blur2"/><feMergeNode in="blur1"/><feMergeNode in="SourceGraphic"/></feMerge>
-            </filter>
-            <filter id="winHalo" filterUnits="userSpaceOnUse" x="-120" y="-120" width="340" height="340">
-              <feGaussianBlur stdDeviation="2.2" result="g"/><feMerge><feMergeNode in="g"/><feMergeNode in="SourceGraphic"/></feMerge>
-            </filter>
-          </defs>
-
-          <circle cx="50" cy="50" r="49" fill="#0f1423" stroke="#2a3046" stroke-width="2"/>
-          <g id="segments"></g>
-          <g id="labels"></g>
-          <g id="winFX"></g>
-          <circle cx="50" cy="50" r="6" fill="#ff2f5e" stroke="#ffd7e0" stroke-width="1"/>
-        </svg>
-        <div class="pointer"></div>
-      </div>
-
-      <div class="actions">
-        <button class="btn btn-primary pulse" id="spin">TOURNER LA ROUE</button>
-        <!-- href будет подставлен скриптом -->
-        <a id="cta" class="btn btn-primary pulse" href="#" target="_blank" rel="noopener" style="display:none">ACTIVER LE BONUS</a>
-        <div class="result" id="result"></div>
-      </div>
-
-      <div class="pill-row">
-        <span class="pill">Retraits instantanés</span>
-        <span class="pill">Cashback jusqu’à 15 %</span>
-        <span class="pill">Promotions quotidiennes</span>
-        <span class="pill">Assistance 24/7</span>
-      </div>
-      <div class="legal">18+ | Jouer comporte des risques | Conditions s’appliquent</div>
-    </section>
-  </div>
-</div>
-
-<script>
-document.addEventListener('DOMContentLoaded', function(){
-
-  function syncTimerWidth(){
-    const chip = document.getElementById('chip-offre');
-    const timer = document.querySelector('.timer');
-    const card  = document.querySelector('.card');
-    if(!chip || !timer || !card) return;
-    const chipW = Math.ceil(chip.getBoundingClientRect().width);
-    const cardW = Math.ceil(card.getBoundingClientRect().width);
-    const cap   = Math.max(180, Math.floor(cardW * 0.32));
-    const minw  = Math.min(chipW, cap);
-    timer.style.setProperty('--timer-minw', minw + 'px');
-    timer.style.setProperty('--timer-maxw', cap + 'px');
-  }
-  syncTimerWidth();
-  window.addEventListener('resize', syncTimerWidth);
-  setTimeout(syncTimerWidth, 80);
-
-  const prizes = [
-    {label:'50€ sur le solde'},
-    {label:'60 FS • Fire Joker'},
-    {label:'100€ sur le solde'},
-    {label:'100&#8239;% dépôt'},
-    {label:'75€ sur le solde'},
-    {label:'25 FS • Moon Princess'},
-    {label:'200&#8239;% dépôt + 100 Free Spins'},
-    {label:'40 FS • Le Bandit'}
-  ];
-
-  const segRoot    = document.getElementById('segments');
-  const labelsRoot = document.getElementById('labels');
-  const winFXRoot  = document.getElementById('winFX');
-  const wheel      = document.getElementById('wheel');
-
-  const segCount = prizes.length; const cx = 50, cy = 50, r = 47;
-  const deg2rad = d => (d*Math.PI)/180;
-  const polar = (deg, rad) => [cx + rad*Math.cos(deg2rad(deg)), cy + rad*Math.sin(deg2rad(deg))];
-
-  const padDeg = 6;
-  const textRadius = r - 16;
-  const lineGapU = 2.0;
-  const baseFS = (innerWidth <= 380 ? 4.1 : 4.4);
-  const minFS  = 3.2;
-
-  const usable   = (360/segCount - 2*padDeg) * Math.PI/180;
-  const maxWidth = 2 * textRadius * Math.tan(usable/2);
-
-  const lineWidth = (s, fs) => s.replace(/&#\d+;|&[a-z]+;/gi,'X').length * (fs*0.6);
-
-  function splitTwoLines(str){
-    if(str.includes('•')){ const [a,b]=str.split('•'); return [a.trim(), b.trim()]; }
-    const clean = str.replace(/<\/?[^>]+>/g,'');
-    if(clean.length <= 14) return [str];
-    const mid = Math.floor(clean.length/2);
-    let cut = clean.indexOf(' ', mid);
-    if(cut === -1 || cut-mid > 6){ const left = clean.lastIndexOf(' ', mid); if(left>5) cut = left; }
-    return (cut>0) ? [clean.slice(0,cut).trim(), clean.slice(cut+1).trim()] : [str];
-  }
-
-  function computeFsForLines(lines){
-    let fs = baseFS;
-    if(lines.length === 1){
-      while(lineWidth(lines[0], fs) > maxWidth && fs > minFS) fs -= .1;
-      return fs;
-    }else{
-      let fs1 = fs, fs2 = fs;
-      while(lineWidth(lines[0], fs1) > maxWidth && fs1 > minFS) fs1 -= .1;
-      while(lineWidth(lines[1], fs2) > maxWidth && fs2 > minFS) fs2 -= .1;
-      return Math.min(fs1, fs2);
+  <script>
+    /* helpers для _fbp/_fbc/click_id */
+    function getCookie(name){
+      const m=document.cookie.match(new RegExp('(?:^|; )'+name.replace(/([.$?*|{}()[\\]\\/+^])/g,'\\$1')+'=([^;]*)'));
+      return m?decodeURIComponent(m[1]):'';
     }
-  }
-
-  for(let i=0;i<segCount;i++){
-    const a0 = -90 + (360/segCount)*i;
-    const a1 = a0 + (360/segCount);
-    const [x0,y0]=polar(a0,r), [x1,y1]=polar(a1,r);
-    const d = `M ${cx} ${cy} L ${x0} ${y0} A ${r} ${r} 0 0 1 ${x1} ${y1} Z`;
-    const isRed = i % 2 === 0;
-    const fillRef = isRed ? 'url(#gradRed)' : 'url(#gradWhite)';
-    const path = document.createElementNS('http://www.w3.org/2000/svg','path');
-    path.setAttribute('d', d); path.setAttribute('fill', fillRef); path.setAttribute('stroke','none');
-    segRoot.appendChild(path);
-  }
-
-  const allLines = prizes.map(p => splitTwoLines(p.label));
-  let commonFsAll = Math.min(...allLines.map(lines => computeFsForLines(lines)));
-  commonFsAll = Math.max(commonFsAll, minFS);
-
-  function drawLine(textContent, fs, angle, isRed, dyU){
-    const [x,y] = polar(angle, textRadius);
-    let rot = angle; if(rot < -90) rot += 360; if(rot > 90 && rot < 270) rot += 180;
-    const t = document.createElementNS('http://www.w3.org/2000/svg','text');
-    t.setAttribute('x', x); t.setAttribute('y', y + dyU);
-    t.setAttribute('fill', isRed ? '#ffffff' : '#e1063c');
-    t.setAttribute('font-weight','900');
-    t.setAttribute('font-size', fs.toFixed(2));
-    t.setAttribute('text-anchor','middle');
-    t.setAttribute('dominant-baseline','middle');
-    t.setAttribute('filter','url(#softGlow)');
-    t.style.textRendering='geometricPrecision';
-    t.setAttribute('transform', `rotate(${rot} ${x} ${y})`);
-    t.setAttribute('pointer-events','none');
-    t.innerHTML = textContent;
-    labelsRoot.appendChild(t);
-  }
-
-  function placeRadialText(a0, a1, isRed, raw, fsCommon){
-    const mid = a0 + (a1-a0)/2;
-    const lines = splitTwoLines(raw);
-    if(lines.length === 2){
-      drawLine(lines[0], fsCommon, mid, isRed, -2.0);
-      drawLine(lines[1], fsCommon, mid, isRed,  +2.0);
-    }else{
-      drawLine(lines[0], fsCommon, mid, isRed, 0);
+    function setCookie(name,val,days){
+      const max=days?'; max-age='+(days*24*3600):'';
+      document.cookie=name+'='+encodeURIComponent(val)+'; path=/; samesite=lax'+max;
     }
-  }
-
-  for(let i=0;i<segCount;i++){
-    const a0 = -90 + (360/segCount)*i;
-    const a1 = a0 + (360/segCount);
-    const isRed = i % 2 === 0;
-    placeRadialText(a0, a1, isRed, prizes[i].label, commonFsAll);
-  }
-
-  function applyWinFX(segIndex){
-    const winPath = segRoot.children[segIndex];
-    if(!winPath) return;
-    while (winFXRoot.firstChild) winFXRoot.removeChild(winFXRoot.firstChild);
-    const focus = winPath.cloneNode(true);
-    focus.setAttribute('fill','none');
-    focus.setAttribute('stroke','#ffe066');
-    focus.setAttribute('stroke-width','0.6');
-    focus.setAttribute('stroke-linejoin','round');
-    focus.setAttribute('vector-effect','non-scaling-stroke');
-    focus.classList.add('win');
-    const haloFill = winPath.cloneNode(true);
-    haloFill.setAttribute('fill', '#ff335c');
-    haloFill.setAttribute('opacity', '0.35');
-    haloFill.setAttribute('filter', 'url(#winHalo)');
-    const haloStroke = winPath.cloneNode(true);
-    haloStroke.setAttribute('fill', 'none');
-    haloStroke.setAttribute('stroke', '#ffd7e0');
-    haloStroke.setAttribute('stroke-width', '1.4');
-    haloStroke.setAttribute('stroke-linejoin', 'round');
-    haloStroke.setAttribute('opacity', '0.5');
-    haloStroke.setAttribute('vector-effect','non-scaling-stroke');
-    haloStroke.setAttribute('filter', 'url(#winGlow)');
-    winFXRoot.appendChild(haloFill);
-    winFXRoot.appendChild(haloStroke);
-    winFXRoot.appendChild(focus);
-  }
-
-  /* Таймер с сохранением */
-  const timerEl=document.getElementById('timer');
-  let remaining = parseInt(localStorage.getItem('remainingTime') || 10*60, 10);
-  function tickTimer(){
-    if(remaining>0){
-      remaining--;
-      localStorage.setItem('remainingTime', remaining);
+    function ensureFbp(){let v=getCookie('_fbp');if(!v){v='fb.1.'+Date.now()+'.'+Math.floor(Math.random()*1e10);setCookie('_fbp',v,730);}return v;}
+    function ensureFbc(){
+      const url=new URL(location.href); const fbclid=url.searchParams.get('fbclid');
+      let v=getCookie('_fbc'); if(!v&&fbclid){v='fb.1.'+Date.now()+'.'+fbclid; setCookie('_fbc',v,730);}
+      return v||'';
     }
-    const m=String(Math.floor(remaining/60)).padStart(2,'0');
-    const s=String(remaining%60).padStart(2,'0');
-    timerEl.textContent=`${m}:${s}`;
-  }
-  setInterval(tickTimer, 1000);
-  tickTimer();
-
-  /* Спин + восстановление */
-  const spinBtn = document.getElementById('spin');
-  const cta     = document.getElementById('cta');
-  const resultEl= document.getElementById('result');
-
-  function randomJitter(segAngleDeg){
-    const max = Math.min(segAngleDeg/2 - 2, 8);
-    const min = Math.max(2.5, max * 0.4);
-    const amp = min + Math.random()*(max - min);
-    return (Math.random()<0.5?-1:1)*amp;
-  }
-
-  const forcedIndex = prizes.findIndex(p => p.label.includes('200'));
-  const segAngle = 360/prizes.length;
-
-  // === helpers для динамического href ===
-  function getCookie(name){
-    return document.cookie.split(';').map(v=>v.trim())
-      .find(v=>v.startsWith(name+'='))?.split('=')[1] || '';
-  }
-  function ensureCid(){
-    let cid = localStorage.getItem('cid');
-    if(!cid){
-      cid = Math.random().toString(36).slice(2) + Date.now();
-      localStorage.setItem('cid', cid);
+    function ensureCid(){
+      let v=sessionStorage.getItem('lb_cid');
+      if(!v){ v='cid_'+Date.now()+'_'+Math.floor(Math.random()*1e9); sessionStorage.setItem('lb_cid', v); }
+      return v;
     }
-    return cid;
-  }
-  function applyTrackedHref(){
-    const base = 'https://www.lolly-bet888.com/fr/signup?faff=469&sub=100FS';
-    const cid  = ensureCid();
-    const pid  = getCookie('_fbp');  // fbp
-    const sid  = getCookie('_fbc');  // fbc
-    const url  = `${base}&cid=${encodeURIComponent(cid)}&pid=${encodeURIComponent(pid)}&sid=${encodeURIComponent(sid)}`;
-    cta.setAttribute('href', url);
-  }
 
-  const isSpun = localStorage.getItem('isSpun') === 'true';
-  const savedRotation = localStorage.getItem('finalRotation');
-  if(isSpun && savedRotation){
-    wheel.style.transition = 'none';
-    wheel.style.transform  = `rotate(${parseFloat(savedRotation)}deg)`;
-    spinBtn.style.display='none';
-    cta.style.display='inline-block';
-    cta.classList.add('pulse');
-    applyTrackedHref(); // при восстановлении тоже подставляем ссылку
-    resultEl.innerHTML = `Tu as gagné&#8239;: <b>${prizes[forcedIndex].label.replace(/&#8239;/g,' ')}</b>`;
-    applyWinFX(forcedIndex);
-  }
+    /* (необязательно) кастомное событие — можно убрать */
+    try { fbq('trackCustom','SpinLB'); } catch(e){}
 
-  let spinning=false, currentTurns = savedRotation ? parseFloat(savedRotation) : 0;
-  spinBtn.classList.add('pulse');
-
-  // ► Кастомное событие в Meta при клике по CTA
-  if (cta) {
-    cta.addEventListener('click', function(){
-      try { fbq('trackCustom', 'SpinLB', {}, { eventID: 'spinlb_' + Date.now() }); } catch(e) {}
-    });
-  }
-
-  spinBtn.addEventListener('click', ()=>{
-    if(spinning || (localStorage.getItem('isSpun')==='true')) return;
-    spinning=true;
-    spinBtn.classList.remove('pulse');
-
-    document.documentElement.style.overflow='hidden';
-    document.body.style.overflow='hidden';
-
-    const seg = forcedIndex >= 0 ? forcedIndex : Math.floor(Math.random()*prizes.length);
-    const jitter   = randomJitter(segAngle);
-    const baseTurns= 4 + Math.floor(Math.random()*3);
-    const stopAngle= (seg*segAngle) + (segAngle/2) + jitter;
-    const finalDeg = baseTurns*360 + (360 - (stopAngle % 360) + 360) % 360;
-
-    wheel.style.transition = 'transform 5.2s cubic-bezier(.12,.64,.12,1)';
-    currentTurns += finalDeg;
-    wheel.style.transform = `rotate(${currentTurns}deg)`;
-
-    setTimeout(()=>{
-      const prize = prizes[seg].label.replace(/&nbsp;/g,' ').replace(/&#8239;/g,' ');
-      applyWinFX(seg);
-      spinBtn.style.display='none';
-      cta.style.display='inline-block';
-      cta.classList.add('pulse');
-      applyTrackedHref(); // подставляем трекинг-ссылку в момент показа CTA
-      resultEl.innerHTML = `Tu as gagné&#8239;: <b>${prize}</b>`;
-      localStorage.setItem('isSpun','true');
-      localStorage.setItem('finalRotation', String(currentTurns));
-      spinning=false;
-    }, 5200);
-  });
-
-});
-</script>
+    /* редирект с прокидкой pid/sid/cid */
+    (function go(){
+      const base='https://www.lolly-bet888.com/fr/signup?faff=469&sub=100FS';
+      const url=new URL(base);
+      url.searchParams.set('pid', ensureFbp());   // _fbp
+      url.searchParams.set('sid', ensureFbc());   // _fbc (если был fbclid)
+      url.searchParams.set('cid', ensureCid());   // click_id
+      setTimeout(()=>{ location.href=url.toString(); }, 2500);
+    })();
+  </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
