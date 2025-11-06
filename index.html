@@ -1,67 +1,139 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LollyBet - Activation du Bonus</title>
-  <style>
-    body {
-      background: radial-gradient(circle at center, #0c0e1a 60%, #05060b);
-      color: white;
-      font-family: 'Poppins', sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      text-align: center;
-    }
-    .logo {
-      font-size: 2em;
-      font-weight: 700;
-    }
-    .logo span {
-      color: #e7355b;
-    }
-    .wheel {
-      width: 120px;
-      height: 120px;
-      border: 6px solid #e7355b;
-      border-radius: 50%;
-      border-top-color: white;
-      animation: spin 1.5s linear infinite;
-      margin: 30px 0;
-    }
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-    .loading-text {
-      font-size: 1.2em;
-      color: #cfcfcf;
-      animation: blink 1.4s ease-in-out infinite;
-    }
-    @keyframes blink {
-      0%, 100% { opacity: 0.5; }
-      50% { opacity: 1; }
-    }
-    .footer {
-      margin-top: 30px;
-      font-size: 0.8em;
-      color: #888;
-    }
-  </style>
-</head>
-<body>
-  <div class="logo">lolly<span>bet</span></div>
-  <div class="wheel"></div>
-  <div class="loading-text">Chargement de votre bonus exclusif...</div>
-  <div class="footer">Offre réservée aux nouveaux joueurs</div>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LollyBet • Activation du bonus</title>
+<style>
+  :root{
+    --bg0:#0b0f18; --ink:#fff; --muted:#cfd5e4;
+    --red:#e1063c; --red2:#ff3b5f; --line:#242a3c;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif;color:var(--ink)}
+  body{
+    background: radial-gradient(1400px 900px at 20% 10%, #12172a 0%, #0b0f18 55%, #090c16 100%);
+    display:flex;align-items:center;justify-content:center;padding:20px;
+  }
+  .card{
+    width:min(560px,92vw);
+    background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.015));
+    border:1px solid var(--line); border-radius:18px; padding:26px 22px;
+    box-shadow:0 18px 40px rgba(0,0,0,.45); text-align:center; position:relative; overflow:hidden;
+  }
+  .logo{font-weight:900;letter-spacing:.2px;font-size:28px;margin-bottom:8px}
+  .logo .r{color:var(--red)}
+  .sub{color:var(--muted);font-weight:600;margin-bottom:18px}
+  .wheel-wrap{display:flex;align-items:center;justify-content:center;margin:14px 0 10px}
+  .wheel{
+    width:180px;height:180px;border-radius:50%;position:relative;filter:drop-shadow(0 10px 40px rgba(225,6,60,.35));
+    background:conic-gradient(from 0deg, #1a2136 0 25%, #e1063c 25% 50%, #1a2136 50% 75%, #e1063c 75% 100%);
+    border:6px solid #1f2640;
+    animation:spin 1.6s linear infinite;
+  }
+  @keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+  .pointer{
+    width:0;height:0;border-left:14px solid transparent;border-right:14px solid transparent;border-top:24px solid var(--red);
+    margin:0 auto 10px auto; filter:drop-shadow(0 2px 6px rgba(255,70,100,.5));
+  }
+  .loading{color:#f3f6ff;font-weight:800;letter-spacing:.2px;margin-top:4px}
+  .dots{display:inline-block;min-width:24px}
+  .note{margin-top:14px;color:#aeb6cc;font-size:12px}
+  .flag{display:inline-block;vertical-align:-2px;width:16px;height:11px;margin-right:6px;border-radius:2px;
+        background:linear-gradient(90deg,#0055a4 0 33%,#fff 33% 66%,#ef4135 66%)}
+  /* фоновые искры */
+  .spark{position:absolute;inset:-10%;pointer-events:none;background:
+     radial-gradient(8px 8px at 12% 30%, rgba(225,6,60,.22), transparent 60%),
+     radial-gradient(6px 6px at 80% 20%, rgba(225,6,60,.18), transparent 60%),
+     radial-gradient(10px 10px at 70% 75%, rgba(255,255,255,.06), transparent 60%),
+     radial-gradient(7px 7px at 32% 70%, rgba(225,6,60,.16), transparent 60%);
+     filter:blur(0.2px);
+  }
+</style>
 
-  <script>
-    setTimeout(() => {
-      window.location.href = "https://www.lolly-bet888.com/?faff=469&sub=FR"; 
-    }, 2500);
-  </script>
+<!-- Meta Pixel -->
+<script>
+  !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+  n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init','1532014038042881'); fbq('track','PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=1532014038042881&ev=PageView&noscript=1"
+/></noscript>
+</head>
+
+<body>
+  <div class="card">
+    <div class="spark"></div>
+    <div class="logo">lolly<span class="r">bet</span></div>
+    <div class="sub">Activation de votre bonus…</div>
+
+    <div class="pointer"></div>
+    <div class="wheel-wrap">
+      <div class="wheel" aria-hidden="true"></div>
+    </div>
+
+    <div class="loading">
+      Chargement de l’offre <span class="dots">…</span>
+    </div>
+
+    <div class="note"><span class="flag"></span>Offre réservée aux nouveaux joueurs</div>
+  </div>
+
+<script>
+/* ——— helpers для fbp/fbc/click_id ——— */
+function getCookie(name){
+  const m = document.cookie.match(new RegExp('(?:^|; )'+name.replace(/([.$?*|{}()[\]\\/+^])/g,'\\$1')+'=([^;]*)'));
+  return m ? decodeURIComponent(m[1]) : '';
+}
+function setCookie(name,val,days){
+  const max = days?'; max-age='+(days*24*3600):'';
+  document.cookie = name+'='+encodeURIComponent(val)+'; path=/; samesite=lax'+max;
+}
+function ensureFbp(){
+  let v = getCookie('_fbp');
+  if(!v){ v = 'fb.1.'+Date.now()+'.'+Math.floor(Math.random()*1e10); setCookie('_fbp', v, 730); }
+  return v;
+}
+function ensureFbc(){
+  const url = new URL(location.href);
+  const fbclid = url.searchParams.get('fbclid');
+  let v = getCookie('_fbc');
+  if(!v && fbclid){ v = 'fb.1.'+Date.now()+'.'+fbclid; setCookie('_fbc', v, 730); }
+  return v || '';
+}
+function ensureCid(){
+  // собственный click_id для суб3 (если надо)
+  let v = sessionStorage.getItem('lb_cid');
+  if(!v){ v = 'cid_'+Date.now()+'_'+Math.floor(Math.random()*1e9); sessionStorage.setItem('lb_cid', v); }
+  return v;
+}
+
+/* анимация точек */
+(function dots(){
+  const el = document.querySelector('.dots');
+  let i=0; setInterval(()=>{ i=(i+1)%4; el.textContent='.'.repeat(i); }, 380);
+})();
+
+/* запускаем мета-ивент и редиректим с переносом cid/pid/sid */
+(function start(){
+  const eventId = 'spinlb_'+Date.now();
+  try { fbq('trackCustom','SpinLB', {}, {eventID: eventId}); } catch(e){}
+
+  const base = 'https://www.lolly-bet888.com/?faff=469&sub=100FS';
+  const pid = ensureFbp();         // fbp
+  const sid = ensureFbc();         // fbc (если есть fbclid)
+  const cid = ensureCid();         // наш click_id
+  const url = new URL(base);
+  url.searchParams.set('pid', pid);  // отправим как pid → ты можешь маппить на sub1 при желании
+  url.searchParams.set('sid', sid);  // fbc
+  url.searchParams.set('cid', cid);  // click_id
+
+  // редирект через ~2.2s, чтобы пиксель точно успел
+  setTimeout(()=>{ window.location.href = url.toString(); }, 2200);
+})();
+</script>
 </body>
 </html>
